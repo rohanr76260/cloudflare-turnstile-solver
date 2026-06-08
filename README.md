@@ -1,36 +1,39 @@
-# Turnstile Auto Solver v5 - Hybrid Approach
+# Turnstile Auto Solver v6 - Permanent Override
 
-## What's New
+## Major Changes
 
-This version combines:
-- **Content Script** - monitors page for Turnstile
-- **Main World Script** - mocks API in page context
-- **Fetch Interception** - catches API calls
+✅ **Non-writable Property** - `turnstile` object cannot be overwritten
+✅ **Fetch Interception** - Catches all API requests
+✅ **XHR Interception** - Intercepts XMLHttpRequest calls
+✅ **Form Auto-fill** - Auto-fills hidden Turnstile fields
+✅ **Dynamic Widgets** - Handles newly added challenges
 
 ## Installation
 
 1. Extract the ZIP
 2. Go to `chrome://extensions/`
-3. Enable **Developer mode** (top right)
+3. Enable **Developer mode**
 4. Click **Load unpacked**
 5. Select this folder
 
 ## How It Works
 
-The extension:
-1. Injects mock Turnstile API before the real script loads
-2. Auto-generates tokens on `render()` calls
-3. Intercepts fetch requests to Turnstile API
-4. Shows a "✓ Verified" message in the challenge area
+1. **Before any other scripts load**, our main-world script runs
+2. It creates a non-writable `window.turnstile` mock object
+3. All Turnstile API calls are intercepted and answered
+4. Tokens are auto-generated and callbacks are executed
+5. Forms are auto-filled with valid tokens
 
 ## Debugging
 
-Open DevTools (F12) and check:
-- Console tab for `[Turnstile Solver]` messages
-- Network tab to see if requests are being intercepted
+Open DevTools (F12):
+- Check Console for `[Turnstile Solver v6]` messages
+- Verify the `turnstile` object is mocked
+- Check Network tab for intercepted requests
 
-## Notes
+## Support
 
-- The extension modifies window.turnstile globally
-- All Turnstile widgets will be auto-solved
-- No additional configuration needed
+If it still doesn't work:
+1. Hard refresh (Ctrl+Shift+R)
+2. Clear cache
+3. Reload the extension
