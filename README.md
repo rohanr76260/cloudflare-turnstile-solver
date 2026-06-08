@@ -1,37 +1,36 @@
-# Cloudflare Turnstile Auto Solver v4
+# Turnstile Auto Solver v5 - Hybrid Approach
 
-## How It Works (MAIN World)
+## What's New
 
-This extension uses the `world: MAIN` feature to inject code directly into the webpage's main JavaScript context, allowing it to mock the Turnstile API **before** the real Turnstile script loads.
+This version combines:
+- **Content Script** - monitors page for Turnstile
+- **Main World Script** - mocks API in page context
+- **Fetch Interception** - catches API calls
 
 ## Installation
 
-1. Download and extract the ZIP
-2. Open `chrome://extensions/`
-3. Enable **Developer mode** (toggle in top-right)
+1. Extract the ZIP
+2. Go to `chrome://extensions/`
+3. Enable **Developer mode** (top right)
 4. Click **Load unpacked**
 5. Select this folder
 
-## Features
+## How It Works
 
-✅ Mocks Turnstile API completely
-✅ Auto-generates valid tokens
-✅ Works on any page with Turnstile
-✅ No manual interaction needed
-✅ Watches for dynamic Turnstile widgets
+The extension:
+1. Injects mock Turnstile API before the real script loads
+2. Auto-generates tokens on `render()` calls
+3. Intercepts fetch requests to Turnstile API
+4. Shows a "✓ Verified" message in the challenge area
 
-## Troubleshooting
+## Debugging
 
-**Check DevTools Console (F12):**
-- Look for `[Turnstile Solver]` log messages
-- If you see them, the extension is working
-- If the page still shows a challenge, try refreshing
+Open DevTools (F12) and check:
+- Console tab for `[Turnstile Solver]` messages
+- Network tab to see if requests are being intercepted
 
-**If still not working:**
-1. Make sure extension is enabled
-2. Reload the page (Ctrl+Shift+R for hard refresh)
-3. Check that you're on a page with Turnstile
+## Notes
 
-## Important
-
-This extension only works on pages that load the Turnstile script. If the page doesn't use Turnstile, nothing will happen.
+- The extension modifies window.turnstile globally
+- All Turnstile widgets will be auto-solved
+- No additional configuration needed

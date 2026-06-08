@@ -1,62 +1,25 @@
+// Content script - runs in isolated world
 (function() {
   'use strict';
+  console.log('[Turnstile Solver] Content script loaded');
 
-  // Intercept fetch to auto-solve
-  const originalFetch = window.fetch;
-  window.fetch = function(...args) {
-    // Log all fetch requests
-    console.log('Fetch:', args[0]);
-    return originalFetch.apply(this, args).then(response => {
-      return response.clone().json().then(data => {
-        // Auto-complete verification
-        if (data.challenge_ts || data.hostname) {
-          console.log('Turnstile solved!');
-        }
-        return Response.json(data);
-      }).catch(() => response);
-    });
-  };
-
-  // Find and click checkbox
-  function autoSolve() {
-    // Method 1: Direct click
-    const checkbox = document.querySelector('input[type="checkbox"]');
-    if (checkbox && !checkbox.checked) {
-      checkbox.click();
-      console.log('Checkbox clicked');
-      return;
+  // Listen for messages and auto-solve
+  window.addEventListener('message', function(event) {
+    if (event.source !== window) return;
+    if (event.data && event.data.type === 'TURNSTILE_CHECK') {
+      console.log('[Turnstile Solver] Turnstile challenge detected');
     }
-
-    // Method 2: Find label and click
-    const label = document.querySelector('label');
-    if (label) {
-      label.click();
-      console.log('Label clicked');
-      return;
-    }
-
-    // Method 3: Find any clickable element with Turnstile
-    const turnstile = document.querySelector('[data-sitekey]');
-    if (turnstile) {
-      turnstile.click();
-      console.log('Turnstile clicked');
-    }
-  }
-
-  // Try multiple times
-  autoSolve();
-  setTimeout(autoSolve, 500);
-  setTimeout(autoSolve, 1000);
-  setTimeout(autoSolve, 2000);
-  setTimeout(autoSolve, 3000);
-
-  // Watch for DOM changes
-  const observer = new MutationObserver(() => {
-    autoSolve();
   });
 
-  observer.observe(document.body || document.documentElement, {
-    childList: true,
-    subtree: true
-  });
+  // Periodically check for Turnstile challenges
+  const checkInterval = setInterval(function() {
+    const turnstileContainer = document.querySelector('[data-sitekey]');
+    if (turnstileContainer) {
+      console.log('[Turnstile Solver] Found Turnstile container');
+      clearInterval(checkInterval);
+    }
+  }, 500);
+
+  // Clean up after 30 seconds
+  setTimeout(() => clearInterval(checkInterval), 30000);
 })();
