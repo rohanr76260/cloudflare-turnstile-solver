@@ -1,20 +1,14 @@
 {
   "manifest_version": 3,
-  "name": "CloudFlare Turnstile Solver",
+  "name": "Turnstile Solver",
   "version": "1.0.0",
-  "description": "Automatically solve CloudFlare Turnstile challenges",
-  "permissions": [],
+  "description": "Auto solve Turnstile",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["script.js"],
+      "js": ["solver.js"],
       "run_at": "document_start",
       "all_frames": true
     }
-  ],
-  "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
-  }
+  ]
 }
