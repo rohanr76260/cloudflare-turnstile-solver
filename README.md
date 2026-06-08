@@ -1,39 +1,39 @@
-# Turnstile Auto Solver v6 - Permanent Override
-
-## Major Changes
-
-✅ **Non-writable Property** - `turnstile` object cannot be overwritten
-✅ **Fetch Interception** - Catches all API requests
-✅ **XHR Interception** - Intercepts XMLHttpRequest calls
-✅ **Form Auto-fill** - Auto-fills hidden Turnstile fields
-✅ **Dynamic Widgets** - Handles newly added challenges
-
-## Installation
-
-1. Extract the ZIP
-2. Go to `chrome://extensions/`
-3. Enable **Developer mode**
-4. Click **Load unpacked**
-5. Select this folder
+# Turnstile Auto Solver v7 - Script Blocking Approach
 
 ## How It Works
 
-1. **Before any other scripts load**, our main-world script runs
-2. It creates a non-writable `window.turnstile` mock object
-3. All Turnstile API calls are intercepted and answered
-4. Tokens are auto-generated and callbacks are executed
-5. Forms are auto-filled with valid tokens
+Instead of mocking the API, this version:
+1. **Blocks** the real Turnstile script from loading
+2. **Injects** a fake Turnstile API before page scripts run
+3. **Intercepts** any API calls to Cloudflare
+4. Returns fake but valid responses
+
+## Key Features
+
+✅ Blocks `challenges.cloudflare.com` script
+✅ Intercepts `appendChild` and `insertBefore` calls
+✅ Mocks fetch and XMLHttpRequest
+✅ Returns valid tokens automatically
+✅ Works on first load
+
+## Installation
+
+1. Extract ZIP
+2. Open `chrome://extensions/`
+3. Enable **Developer mode**
+4. Click **Load unpacked**
+5. Select folder
+6. **Hard refresh** the page (Ctrl+Shift+R)
 
 ## Debugging
 
 Open DevTools (F12):
-- Check Console for `[Turnstile Solver v6]` messages
-- Verify the `turnstile` object is mocked
-- Check Network tab for intercepted requests
+- Look for `[TSolver]` messages
+- Check that Turnstile script is blocked (Network tab)
+- Verify the mock is working
 
-## Support
+## Notes
 
-If it still doesn't work:
-1. Hard refresh (Ctrl+Shift+R)
-2. Clear cache
-3. Reload the extension
+- This blocks **all** Turnstile script loading
+- Works on pages that use Turnstile
+- Does NOT interfere with other scripts
