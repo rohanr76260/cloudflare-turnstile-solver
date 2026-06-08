@@ -1,20 +1,20 @@
-# Turnstile Auto Solver v7 - Script Blocking Approach
+# Turnstile Auto Solver v8 - Network Level Interception
 
 ## How It Works
 
-Instead of mocking the API, this version:
-1. **Blocks** the real Turnstile script from loading
-2. **Injects** a fake Turnstile API before page scripts run
-3. **Intercepts** any API calls to Cloudflare
-4. Returns fake but valid responses
+This version intercepts at the **network level** using:
+1. **Declarative Net Request** - blocks Turnstile scripts
+2. **WebRequest API** - intercepts and modifies API responses
+3. **Content Script** - handles DOM manipulation
+4. **Main World Injection** - provides mock API
 
-## Key Features
+## Features
 
-✅ Blocks `challenges.cloudflare.com` script
-✅ Intercepts `appendChild` and `insertBefore` calls
-✅ Mocks fetch and XMLHttpRequest
-✅ Returns valid tokens automatically
-✅ Works on first load
+✅ Blocks Cloudflare scripts at network level
+✅ Redirects API calls to mock responses
+✅ Auto-generates tokens
+✅ Works on server-side challenges
+✅ No page reloads needed
 
 ## Installation
 
@@ -23,17 +23,25 @@ Instead of mocking the API, this version:
 3. Enable **Developer mode**
 4. Click **Load unpacked**
 5. Select folder
-6. **Hard refresh** the page (Ctrl+Shift+R)
+6. Refresh the page
 
-## Debugging
+## How to Use
 
-Open DevTools (F12):
-- Look for `[TSolver]` messages
-- Check that Turnstile script is blocked (Network tab)
-- Verify the mock is working
+1. Go to a page with Cloudflare Turnstile challenge
+2. The extension will:
+   - Block the real Turnstile script
+   - Inject a mock API
+   - Auto-solve any widgets
+3. Check console (F12) for `[TSolver]` messages
 
-## Notes
+## Troubleshooting
 
-- This blocks **all** Turnstile script loading
-- Works on pages that use Turnstile
-- Does NOT interfere with other scripts
+If challenge still appears:
+- Hard refresh (Ctrl+Shift+R)
+- Check that `rules.json` is present
+- Verify extension is enabled
+- Open DevTools and look for `[TSolver]` logs
+
+## Note
+
+This extension works best on pages where JavaScript can bypass the challenge. Some server-side challenges may still require additional action.

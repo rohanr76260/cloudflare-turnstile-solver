@@ -1,55 +1,28 @@
-// Content script for additional monitoring
+// Content script - intercepts DOM manipulation
 (function() {
   'use strict';
-  console.log('[Turnstile Solver v6] Content script loaded');
+  console.log('[TSolver v8] Content script loaded');
   
-  // Monitor for form submissions and auto-fill any hidden Turnstile tokens
-  document.addEventListener('submit', function(e) {
-    console.log('[Turnstile Solver v6] Form submitted, checking for Turnstile fields...');
-    
-    const form = e.target;
-    const hiddenInputs = form.querySelectorAll('input[type="hidden"]');
-    
-    hiddenInputs.forEach(input => {
-      if (input.name && (input.name.includes('turnstile') || input.name.includes('cf_clearance'))) {
-        if (!input.value) {
-          input.value = 'fake_token_' + Math.random().toString(36).substring(2, 30);
-          console.log('[Turnstile Solver v6] Auto-filled hidden field:', input.name);
-        }
-      }
-    });
-  }, true);
+  // Intercept script loading
+  const origAppendChild = Element.prototype.appendChild;
+  Element.prototype.appendChild = function(el) {
+    if (el.tagName === 'SCRIPT' && (el.src.includes('challenges.cloudflare.com') || el.src.includes('turnstile'))) {
+      console.log('[TSolver] Blocked script:', el.src);
+      return el;
+    }
+    return origAppendChild.call(this, el);
+  };
   
-  // Also watch for dynamically added Turnstile containers
-  const observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      if (mutation.addedNodes.length) {
-        mutation.addedNodes.forEach(function(node) {
-          if (node.nodeType === 1) { // Element node
-            if (node.getAttribute && (node.getAttribute('data-sitekey') || node.classList.contains('cf-turnstile'))) {
-              console.log('[Turnstile Solver v6] Detected new Turnstile widget');
-              
-              // Try to trigger render if turnstile is available
-              if (window.turnstile && typeof window.turnstile.render === 'function') {
-                setTimeout(() => {
-                  window.turnstile.render(node, {
-                    callback: function(token) {
-                      console.log('[Turnstile Solver v6] Dynamic widget solved');
-                    }
-                  });
-                }, 100);
-              }
-            }
-          }
-        });
-      }
-    });
-  });
-  
-  observer.observe(document.documentElement, {
-    childList: true,
-    subtree: true
-  });
-  
-  console.log('[Turnstile Solver v6] Mutation observer started');
+  // Intercept fetch
+  const origFetch = window.fetch;
+  window.fetch = function(url, init) {
+    if (typeof url === 'string' && (url.includes('challenges') || url.includes('turnstile'))) {
+      console.log('[TSolver] Blocked fetch:', url);
+      return Promise.resolve(new Response(
+        JSON.stringify({ success: true, error_codes: [] }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      ));
+    }
+    return origFetch.call(this, url, init);
+  };
 })();

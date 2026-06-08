@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "challenges.cloudflare.com",
+      "resourceTypes": ["script"]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "data:application/json,{\"success\":true}"
+      }
+    },
+    "condition": {
+      "urlFilter": "challenges.cloudflare.com",
+      "resourceTypes": ["xhr", "fetch"]
+    }
+  }
+]
