@@ -1,14 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "Turnstile Solver",
-  "version": "1.0.0",
-  "description": "Auto-solve Cloudflare Turnstile",
-  "permissions": ["scripting", "activeTab"],
-  "host_permissions": ["*://*/*"],
+  "name": "Cloudflare Turnstile Solver",
+  "version": "2.0.0",
+  "description": "Automatically solve Cloudflare Turnstile challenges",
+  "icons": {
+    "16": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='7' fill='%23007AFF'/></svg>",
+    "48": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='7' fill='%23007AFF'/></svg>",
+    "128": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='7' fill='%23007AFF'/></svg>"
+  },
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
-      "js": ["content.js"],
+      "matches": ["<all_urls>"],
+      "js": ["solver.js"],
       "run_at": "document_start",
       "all_frames": true
     }

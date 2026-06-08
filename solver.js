@@ -1,41 +1,71 @@
-// CloudFlare Turnstile Auto Solver
+// Cloudflare Turnstile Solver
 (function() {
-  'use strict';
-
   function solveTurnstile() {
-    // Find iframe
-    const iframe = document.querySelector('iframe[src*="challenges.cloudflare.com"]');
-    if (!iframe) {
-      console.log('No iframe found');
-      return;
-    }
-
     try {
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-      if (!iframeDoc) {
-        console.log('Cannot access iframe');
-        return;
+      // Find the Turnstile iframe
+      const frames = document.querySelectorAll('iframe');
+      
+      for (let frame of frames) {
+        try {
+          // Try to access iframe content
+          const doc = frame.contentDocument || frame.contentWindow?.document;
+          if (!doc) continue;
+          
+          // Find checkbox input
+          const checkbox = doc.querySelector('input[type="checkbox"]');
+          if (checkbox) {
+            checkbox.checked = true;
+            checkbox.click();
+            
+            // Trigger change event
+            const event = new Event('change', { bubbles: true });
+            checkbox.dispatchEvent(event);
+            
+            console.log('[Turnstile Solver] Checkbox solved');
+            return true;
+          }
+        } catch (e) {
+          // Cross-origin frames - continue
+          continue;
+        }
       }
-
-      // Find checkbox
-      const checkbox = iframeDoc.querySelector('input[type="checkbox"]');
-      if (checkbox) {
-        checkbox.click();
-        console.log('Checkbox clicked');
+      
+      // Fallback: Try to find and click any Turnstile elements
+      const turnstileWidget = document.querySelector('.cf-turnstile');
+      if (turnstileWidget) {
+        const button = turnstileWidget.querySelector('button') || 
+                       turnstileWidget.querySelector('[role="button"]');
+        if (button) {
+          button.click();
+          console.log('[Turnstile Solver] Button clicked');
+          return true;
+        }
       }
-    } catch (e) {
-      console.log('Error:', e);
+    } catch (error) {
+      console.log('[Turnstile Solver] Error:', error.message);
     }
+    return false;
   }
-
-  // Start solving
+  
+  // Solve on page load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', solveTurnstile);
   } else {
     solveTurnstile();
   }
-
-  // Retry after delay
+  
+  // Try again after delays
+  setTimeout(solveTurnstile, 1000);
   setTimeout(solveTurnstile, 2000);
-  setTimeout(solveTurnstile, 5000);
+  setTimeout(solveTurnstile, 3000);
+  
+  // Monitor for new elements
+  const observer = new MutationObserver(() => {
+    solveTurnstile();
+  });
+  
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
 })();

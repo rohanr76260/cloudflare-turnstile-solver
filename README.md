@@ -1,44 +1,29 @@
-# CloudFlare Turnstile Solver
+# Cloudflare Turnstile Solver
 
-A Chrome extension that automatically solves CloudFlare Turnstile challenges.
-
-## Features
-- Automatically detects Turnstile widget
-- Simulates realistic mouse clicks
-- Works across all frames on the page
+A Chrome extension that automatically solves Cloudflare Turnstile challenges.
 
 ## Installation
 
-### Manual Installation (Developer Mode)
-1. Download/clone this repository
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" (top-right toggle)
+1. Download the extension files
+2. Open `chrome://extensions/`
+3. Enable "Developer mode" (top-right)
 4. Click "Load unpacked"
 5. Select the extension folder
 
-### From ZIP File
-1. Extract the ZIP file
-2. Follow the Manual Installation steps above
+## How it works
 
-## Files
-- `manifest.json` - Extension configuration
-- `script.js` - Main automation logic
-- `background.js` - Background script
-- `README.md` - This file
+The extension automatically detects Cloudflare Turnstile challenges and:
+- Finds the challenge iframe
+- Locates and clicks the verification checkbox
+- Triggers necessary events for verification
 
-## Bug Fixes (v2.0.2)
-- ✅ Fixed Shadow DOM queries to target correct widget element
-- ✅ Increased detection frequency from 1s to 500ms intervals
-- ✅ Improved widget selection logic
-- ✅ Removed dangerous global attachShadow override
+## Troubleshooting
 
-## Security Notes
-- This extension respects Shadow DOM encapsulation
-- Uses only public APIs provided by the browser
-- Does not break security boundaries
-
-## Author
-Akmal Abar
+If it doesn't work:
+1. Disable and re-enable the extension
+2. Refresh the page
+3. Check the Console (F12) for error messages
 
 ## License
+
 MIT
