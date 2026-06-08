@@ -1,46 +1,60 @@
-// Inject mock Turnstile API
 (function() {
   'use strict';
-  console.log('[TSolver v8] Injector running');
+  console.log('[TSolver v10] Main world injector');
   
-  const mockScript = `
-    (function() {
-      window.turnstile = {
-        render: function(e, o) {
-          console.log('[TSolver] render');
-          const id = 'cf_' + Date.now();
-          const token = 'mock_' + Math.random().toString(36).substr(2, 50);
-          
-          if (e) {
-            if (typeof e === 'string') e = document.getElementById(e);
-            if (e) e.innerHTML = '<div style="border:2px solid #4CAF50;padding:10px;border-radius:4px;background:#e8f5e9;text-align:center;cursor:pointer;"><input type=checkbox checked disabled style="margin-right:8px;"><strong style="color:#4CAF50;font-weight:bold;">Solved</strong></div>';
-          }
-          
-          if (o && typeof o.callback === 'function') {
-            setTimeout(() => o.callback(token), 100);
-          }
-          
-          window.__cf_tokens = window.__cf_tokens || {};
-          window.__cf_tokens[id] = token;
-          return id;
-        },
-        reset: (id) => id,
-        remove: (id) => id,
-        isExpired: () => false,
-        getResponse: function(id) {
-          if (window.__cf_tokens && window.__cf_tokens[id]) return window.__cf_tokens[id];
-          return 'mock_' + Math.random().toString(36).substr(2, 50);
-        },
-        ready: (cb) => typeof cb === 'function' && cb(),
-        implicitCaptchaCallback: () => true
-      };
-      console.log('[TSolver] API ready');
-    })();
-  `;
+  // Track render calls
+  const renderCallbacks = [];
   
-  const script = document.createElement('script');
-  script.textContent = mockScript;
-  if (document.documentElement) {
-    document.documentElement.insertBefore(script, document.documentElement.firstChild);
-  }
+  window.turnstile = {
+    render: function(container, options) {
+      console.log('[TSolver] render() called');
+      
+      const widgetId = 'cf_' + Math.random().toString(36).substr(2, 10);
+      
+      // Store callback for later use
+      if (options && typeof options.callback === 'function') {
+        renderCallbacks.push(options.callback);
+        window.__turnstile_callbacks = renderCallbacks;
+      }
+      
+      // Show loading state
+      if (container) {
+        if (typeof container === 'string') {
+          container = document.getElementById(container);
+        }
+        if (container) {
+          container.innerHTML = '<div style="padding:10px;background:#2196F3;color:white;border-radius:4px;text-align:center;">Solving with Anti-Captcha...</div>';
+        }
+      }
+      
+      return widgetId;
+    },
+    
+    reset: function(id) {
+      console.log('[TSolver] reset():', id);
+      return id;
+    },
+    
+    remove: function(id) {
+      console.log('[TSolver] remove():', id);
+      return id;
+    },
+    
+    isExpired: function(id) {
+      return false;
+    },
+    
+    getResponse: function(id) {
+      return 'auto-solved-token';
+    },
+    
+    ready: function(callback) {
+      if (typeof callback === 'function') {
+        callback();
+      }
+      return true;
+    }
+  };
+  
+  console.log('[TSolver v10] Turnstile API ready');
 })();

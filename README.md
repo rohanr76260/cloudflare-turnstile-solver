@@ -1,52 +1,64 @@
-# Turnstile Auto Solver v9 - Complete Interception
+# Turnstile Auto Solver v10 - Anti-Captcha Integration
 
-## What's New
+## Setup
 
-✅ **Main World Injection** - Pre-defines turnstile API
-✅ **Challenge Monitoring** - Watches for widgets
-✅ **Auto-Render** - Automatically renders and solves
-✅ **Request Interception** - Blocks API calls
-✅ **Form Auto-Fill** - Fills hidden inputs
+### 1. Get Anti-Captcha Account
+1. Visit https://anti-captcha.com
+2. Create free account (you get ~$10 free credits)
+3. Copy your **API Key**
 
-## Installation
-
+### 2. Install Extension
 1. Extract ZIP
 2. Go to `chrome://extensions/`
 3. Enable **Developer mode**
 4. Click **Load unpacked**
 5. Select folder
-6. **Reload page** (F5 or Ctrl+R)
 
-## How to Use
+### 3. Configure API Key
+1. Open extension options (right-click extension → Options)
+2. Paste your Anti-Captcha API key
+3. Click Save
 
-1. Visit any page with Cloudflare Turnstile
-2. Extension automatically:
-   - Injects fake API
-   - Detects widgets
-   - Solves them
-   - Fills forms
-3. Check console (F12) for `[TSolver]` messages
+## How It Works
 
-## Notes
+1. Extension detects Turnstile widget on page
+2. Sends request to background script
+3. Background script calls Anti-Captcha API
+4. Anti-Captcha solves the challenge
+5. Token is returned and used to bypass
+6. Page auto-refreshes with verification
 
-- **Server-side challenges** may still show initially
-- **This is a JavaScript-based solution** - some challenges need actual solving
-- For best results, use with pages that accept pre-solved tokens
+## Pricing
+
+- **Free trial**: ~$10 credit
+- **Regular**: $0.50 - $1.00 per captcha
+- **Bulk**: Discounted rates available
+
+## Debugging
+
+Open DevTools (F12):
+- Console tab shows `[TSolver]` messages
+- Check if widget is detected
+- Verify API key is set
 
 ## Troubleshooting
 
-```
-F12 → Console → Look for [TSolver] messages
-```
+**"API key not set" error:**
+- Set your API key in extension options
 
-If you see:
-- `Turnstile API injected` ✓ Good
-- `render() called` ✓ Widget detected
-- `Executing callback` ✓ Token generated
+**"Failed to create task" error:**
+- Check your API key is correct
+- Check account has credits
+- Check website is not blocked
 
-## Limitation
+**Widget not detected:**
+- Refresh page
+- Check page actually has Turnstile
+- Open DevTools console
 
-If the page shows "Loading Turnstile captcha" indefinitely, this means:
-- The server is requiring a **real user verification**
-- The challenge is **not JavaScript-solvable**
-- You may need to use a **proxy service** or **real solver API**
+## Limitations
+
+- Requires active Anti-Captcha account
+- Costs money per solve
+- Needs internet connection
+- Some pages may still have additional verification

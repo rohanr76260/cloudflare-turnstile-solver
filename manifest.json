@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Turnstile Auto Solver",
-  "version": "9.0.0",
-  "description": "Auto-solve Cloudflare Turnstile challenges",
+  "name": "Turnstile Auto Solver with Anti-Captcha",
+  "version": "10.0.0",
+  "description": "Auto-solve Cloudflare Turnstile using Anti-Captcha API",
   "permissions": ["scripting", "webRequest"],
   "host_permissions": ["*://*/*"],
   "background": {
@@ -11,15 +11,15 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["main-injector.js"],
+      "js": ["content.js"],
       "run_at": "document_start",
-      "world": "MAIN",
       "all_frames": true
     },
     {
       "matches": ["*://*/*"],
-      "js": ["solver.js"],
+      "js": ["injector.js"],
       "run_at": "document_start",
+      "world": "MAIN",
       "all_frames": true
     }
   ]
