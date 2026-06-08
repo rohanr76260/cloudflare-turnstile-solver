@@ -1,15 +1,16 @@
 {
   "manifest_version": 3,
   "name": "Turnstile Auto Solver",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Auto-solve Cloudflare Turnstile challenges",
-  "permissions": ["webRequest", "scripting"],
+  "permissions": ["scripting"],
   "host_permissions": ["*://*/*"],
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["inject.js"],
+      "js": ["main.js"],
       "run_at": "document_start",
+      "world": "MAIN",
       "all_frames": true
     }
   ]
