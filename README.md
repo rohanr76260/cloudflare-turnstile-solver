@@ -1,47 +1,52 @@
-# Turnstile Auto Solver v8 - Network Level Interception
+# Turnstile Auto Solver v9 - Complete Interception
 
-## How It Works
+## What's New
 
-This version intercepts at the **network level** using:
-1. **Declarative Net Request** - blocks Turnstile scripts
-2. **WebRequest API** - intercepts and modifies API responses
-3. **Content Script** - handles DOM manipulation
-4. **Main World Injection** - provides mock API
-
-## Features
-
-✅ Blocks Cloudflare scripts at network level
-✅ Redirects API calls to mock responses
-✅ Auto-generates tokens
-✅ Works on server-side challenges
-✅ No page reloads needed
+✅ **Main World Injection** - Pre-defines turnstile API
+✅ **Challenge Monitoring** - Watches for widgets
+✅ **Auto-Render** - Automatically renders and solves
+✅ **Request Interception** - Blocks API calls
+✅ **Form Auto-Fill** - Fills hidden inputs
 
 ## Installation
 
 1. Extract ZIP
-2. Open `chrome://extensions/`
+2. Go to `chrome://extensions/`
 3. Enable **Developer mode**
 4. Click **Load unpacked**
 5. Select folder
-6. Refresh the page
+6. **Reload page** (F5 or Ctrl+R)
 
 ## How to Use
 
-1. Go to a page with Cloudflare Turnstile challenge
-2. The extension will:
-   - Block the real Turnstile script
-   - Inject a mock API
-   - Auto-solve any widgets
+1. Visit any page with Cloudflare Turnstile
+2. Extension automatically:
+   - Injects fake API
+   - Detects widgets
+   - Solves them
+   - Fills forms
 3. Check console (F12) for `[TSolver]` messages
+
+## Notes
+
+- **Server-side challenges** may still show initially
+- **This is a JavaScript-based solution** - some challenges need actual solving
+- For best results, use with pages that accept pre-solved tokens
 
 ## Troubleshooting
 
-If challenge still appears:
-- Hard refresh (Ctrl+Shift+R)
-- Check that `rules.json` is present
-- Verify extension is enabled
-- Open DevTools and look for `[TSolver]` logs
+```
+F12 → Console → Look for [TSolver] messages
+```
 
-## Note
+If you see:
+- `Turnstile API injected` ✓ Good
+- `render() called` ✓ Widget detected
+- `Executing callback` ✓ Token generated
 
-This extension works best on pages where JavaScript can bypass the challenge. Some server-side challenges may still require additional action.
+## Limitation
+
+If the page shows "Loading Turnstile captcha" indefinitely, this means:
+- The server is requiring a **real user verification**
+- The challenge is **not JavaScript-solvable**
+- You may need to use a **proxy service** or **real solver API**

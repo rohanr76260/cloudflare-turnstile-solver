@@ -1,39 +1,24 @@
 {
   "manifest_version": 3,
   "name": "Turnstile Auto Solver",
-  "version": "8.0.0",
-  "description": "Auto-solve Cloudflare Turnstile challenges at network level",
-  "permissions": [
-    "scripting",
-    "webRequest",
-    "webRequestBlocking",
-    "declarativeNetRequest",
-    "declarativeNetRequestWithHostAccess"
-  ],
+  "version": "9.0.0",
+  "description": "Auto-solve Cloudflare Turnstile challenges",
+  "permissions": ["scripting", "webRequest"],
   "host_permissions": ["*://*/*"],
   "background": {
     "service_worker": "background.js"
   },
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "ruleset_1",
-        "enabled": true,
-        "path": "rules.json"
-      }
-    ]
-  },
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["injector.js"],
+      "js": ["main-injector.js"],
       "run_at": "document_start",
       "world": "MAIN",
       "all_frames": true
     },
     {
       "matches": ["*://*/*"],
-      "js": ["content.js"],
+      "js": ["solver.js"],
       "run_at": "document_start",
       "all_frames": true
     }
