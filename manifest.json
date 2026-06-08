@@ -2,13 +2,12 @@
   "manifest_version": 3,
   "name": "Turnstile Solver",
   "version": "1.0.0",
-  "description": "Auto solve Turnstile",
+  "description": "Auto-solve Cloudflare Turnstile",
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["solver.js"],
-      "run_at": "document_start",
-      "all_frames": true
+      "matches": ["*://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
     }
   ]
 }
