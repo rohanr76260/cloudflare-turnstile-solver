@@ -3,11 +3,14 @@
   "name": "Turnstile Solver",
   "version": "1.0.0",
   "description": "Auto-solve Cloudflare Turnstile",
+  "permissions": ["scripting", "activeTab"],
+  "host_permissions": ["*://*/*"],
   "content_scripts": [
     {
       "matches": ["*://*/*"],
       "js": ["content.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "all_frames": true
     }
   ]
 }
